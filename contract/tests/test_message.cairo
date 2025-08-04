@@ -1,14 +1,11 @@
-
 use contract::message::{
-    IMessageStorageDispatcher, 
-    IMessageStorageDispatcherTrait,
-    IMessageStorageSafeDispatcher,
+    IMessageStorageDispatcher, IMessageStorageDispatcherTrait, IMessageStorageSafeDispatcher,
     IMessageStorageSafeDispatcherTrait,
 };
-use snforge_std::{declare, ContractClassTrait, DeclareResultTrait};
-use starknet::ContractAddress;
 use core::array::ArrayTrait;
 use core::traits::TryInto;
+use snforge_std::{ContractClassTrait, DeclareResultTrait, declare};
+use starknet::ContractAddress;
 
 // Define a helper function to deploy the contract
 fn deploy_contract() -> (IMessageStorageDispatcher, IMessageStorageSafeDispatcher) {
@@ -17,118 +14,76 @@ fn deploy_contract() -> (IMessageStorageDispatcher, IMessageStorageSafeDispatche
 
     let message_storage_dispatcher = IMessageStorageDispatcher { contract_address };
     let message_storage_safe_dispatcher = IMessageStorageSafeDispatcher { contract_address };
-    
+
     (message_storage_dispatcher, message_storage_safe_dispatcher)
 }
 
-    use contract::message::{
-        IMessageStorageDispatcher, IMessageStorageDispatcherTrait, IMessageStorageSafeDispatcher,
-        IMessageStorageSafeDispatcherTrait,
-    };
-    use core::array::ArrayTrait;
-    use core::traits::TryInto;
-    use snforge_std::{ContractClassTrait, DeclareResultTrait, declare};
-    use starknet::ContractAddress;
+#[test]
+fn test_store_and_get_message() {
+    // Deploy the contract
+    let (message_storage_dispatcher, _) = deploy_contract();
 
-    // Define a helper function to deploy the contract
-    fn deploy_contract() -> (IMessageStorageDispatcher, IMessageStorageSafeDispatcher) {
-        let contract_class = declare("MessageStorage").unwrap().contract_class();
+    // Define a recipient address
+    let recipient: ContractAddress = 'recipient'.try_into().unwrap();
 
-        let (contract_address, _) = contract_class.deploy(@array![]).unwrap();
     // Define a message
     let message: ByteArray = "Hello, World!";
 
-        let message_storage_dispatcher = IMessageStorageDispatcher { contract_address };
-        let message_storage_safe_dispatcher = IMessageStorageSafeDispatcher { contract_address };
+    // Store the message
+    message_storage_dispatcher.store_message(recipient, message.clone());
 
-        (message_storage_dispatcher, message_storage_safe_dispatcher)
-    }
+    // Retrieve the message at index 0
+    let retrieved_message = message_storage_dispatcher.get_message(recipient, 0);
 
-    #[test]
-    fn test_store_and_get_message() {
-        // Deploy the contract
-        let (message_storage_dispatcher, _) = deploy_contract();
-
-    // Convert to strings for comparison (avoid direct ByteArray comparison)
-    let original_str = message.clone();
-    let retrieved_str = retrieved_message.clone();
-    
-    // Simple assertion for existence
-    assert(retrieved_str.len() > 0, 'Retrieved message is empty');
+    // Assert that the retrieved message matches the original
+    assert(retrieved_message == message, 'Retrieved message should match');
 }
 
-        // Define a recipient address
-        let recipient: ContractAddress = 'recipient'.try_into().unwrap();
+#[test]
+fn test_get_all_messages() {
+    // Deploy the contract
+    let (message_storage_dispatcher, _) = deploy_contract();
 
-        // Define a message as an array of felt252
-        let message: ByteArray = "Hello, World!";
+    // Define a recipient address
+    let recipient: ContractAddress = 'recipient'.try_into().unwrap();
 
-        // Store the message
-        message_storage_dispatcher.store_message(recipient, message.clone());
+    // Define two messages
+    let message1: ByteArray = "Hello, Alice!";
+    let message2: ByteArray = "Hello, Bob!";
 
-        // Retrieve the message at index 0
-        let retrieved_message = message_storage_dispatcher.get_message(recipient, 0);
+    // Store the messages
+    message_storage_dispatcher.store_message(recipient, message1.clone());
+    message_storage_dispatcher.store_message(recipient, message2.clone());
 
-        // Assert that the retrieved message is equal to the first element of the original message
-        assert(retrieved_message == message, 'Retrieved message should match');
-    }
-
-    #[test]
-    fn test_get_all_messages() {
-        // Deploy the contract
-        let (message_storage_dispatcher, _) = deploy_contract();
-
-        // Define a recipient address
-        let recipient: ContractAddress = 'recipient'.try_into().unwrap();
-
-        // Define two messages
-        let message1: ByteArray = "Hello, Alice!";
-        let message2: ByteArray = "Hello, Bob!";
-
-        // Store the messages
-        message_storage_dispatcher.store_message(recipient, message1.clone());
-        message_storage_dispatcher.store_message(recipient, message2.clone());
-
-        // Retrieve all messages for the recipient
-        let all_messages = message_storage_dispatcher.get_all_messages(recipient);
-
-        // Assert that the length of the retrieved messages is correct
-        assert(all_messages.len() == 2, 'Incorrect number of messages');
-
-        // Assert that the messages are retrieved in the correct order
-        assert(all_messages.at(0) == @message1, 'First message should match');
-        assert(all_messages.at(1) == @message2, 'Second message should match');
-    }
-
-    #[test]
-    #[feature("safe_dispatcher")]
-    fn test_safe_panic_cannot_store_empty_message() {
-        // Deploy the contract
-        let (_, message_storage_safe_dispatcher) = deploy_contract();
-
-        // Define a recipient address
-        let recipient: ContractAddress = 'recipient'.try_into().unwrap();
-
-        // Attempt to store an empty message
-        let result = message_storage_safe_dispatcher.store_message(recipient, "");
-
-        match result {
-            Result::Ok(_) => core::panic_with_felt252('Should have panicked'),
-            Result::Err(panic_data) => assert(
-                *panic_data.at(0) == 'Message cannot be empty', *panic_data.at(0),
-            ),
-        }
-    }
+    // Retrieve all messages for the recipient
+    let all_messages = message_storage_dispatcher.get_all_messages(recipient);
 
     // Assert that the length of the retrieved messages is correct
     assert(all_messages.len() == 2, 'Incorrect number of messages');
-    
-    // Simple length assertions for the retrieved messages
-    let retrieved1 = all_messages.at(0);
-    let retrieved2 = all_messages.at(1);
-    
-    assert(retrieved1.len() > 0, 'First message is empty');
-    assert(retrieved2.len() > 0, 'Second message is empty');
+
+    // Assert that the messages are retrieved in the correct order
+    assert(all_messages.at(0) == @message1, 'First message should match');
+    assert(all_messages.at(1) == @message2, 'Second message should match');
+}
+
+#[test]
+#[feature("safe_dispatcher")]
+fn test_safe_panic_cannot_store_empty_message() {
+    // Deploy the contract
+    let (_, message_storage_safe_dispatcher) = deploy_contract();
+
+    // Define a recipient address
+    let recipient: ContractAddress = 'recipient'.try_into().unwrap();
+
+    // Attempt to store an empty message
+    let result = message_storage_safe_dispatcher.store_message(recipient, "");
+
+    match result {
+        Result::Ok(_) => core::panic_with_felt252('Should have panicked'),
+        Result::Err(panic_data) => assert(
+            *panic_data.at(0) == 'Message cannot be empty', *panic_data.at(0),
+        ),
+    }
 }
 
 #[test]
@@ -164,16 +119,16 @@ fn test_delete_single_message() {
     // Verify remaining messages
     let remaining = dispatcher.get_all_messages(recipient);
     assert(remaining.len() == 2, 'Should have 2 messages left');
- }
+}
 
- #[test]
+#[test]
 fn test_delete_last_message() {
     let (dispatcher, _) = deploy_contract();
     let recipient: ContractAddress = 'recipient'.try_into().unwrap();
 
     dispatcher.store_message(recipient, "Lone message");
     dispatcher.delete_message(recipient, 0);
-    
+
     assert(dispatcher.get_all_messages(recipient).len() == 0, 'Last message should be deleted');
 }
 
@@ -182,11 +137,7 @@ fn test_delete_last_message() {
 fn test_delete_invalid_index_panics() {
     let (dispatcher, _) = deploy_contract();
     let recipient: ContractAddress = 'recipient'.try_into().unwrap();
-    
+
     dispatcher.store_message(recipient, "Only message");
     dispatcher.delete_message(recipient, 1);
-    match result {
-        Result::Ok(_) => core::panic_with_felt252('Should have panicked'),
-        Result::Err(panic_data) => assert(*panic_data.at(0) == 'Message cannot be empty', *panic_data.at(0)),
-    }
 }

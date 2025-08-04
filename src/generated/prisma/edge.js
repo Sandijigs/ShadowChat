@@ -172,7 +172,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/james/Onlydust/ShadowChat/src/generated/prisma",
+      "value": "/Users/idjighereoghenerukevwesandra/Desktop/OpensourceFolder/ShadowChat/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -181,12 +181,28 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-1.1.x",
+        "value": "darwin",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-1.1.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "darwin"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "darwin-arm64"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/james/Onlydust/ShadowChat/prisma/schema.prisma",
+    "sourceFilePath": "/Users/idjighereoghenerukevwesandra/Desktop/OpensourceFolder/ShadowChat/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -199,7 +215,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -208,8 +224,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String   @id @default(cuid())\n  username      String   @unique\n  email         String   @unique\n  passwordHash  String\n  profilePicUrl String?\n  status        String?\n  walletAddress String   @unique\n  avatar        String?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n\n  // Relations\n  groupsCreated    Group[]       @relation(\"UserCreatedGroups\")\n  groupMemberships GroupMember[]\n  messages         Message[]\n}\n\nmodel AnonymousUser {\n  id            String   @id @default(cuid())\n  username      String   @unique\n  walletAddress String   @unique\n  avatar        String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n}\n\nmodel Group {\n  id          String   @id @default(cuid())\n  name        String\n  description String?\n  creatorId   String\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // Relations\n  creator  User          @relation(\"UserCreatedGroups\", fields: [creatorId], references: [id])\n  members  GroupMember[]\n  messages Message[]\n}\n\nmodel GroupMember {\n  id       String   @id @default(cuid())\n  userId   String\n  groupId  String\n  joinedAt DateTime @default(now())\n\n  user  User  @relation(fields: [userId], references: [id])\n  group Group @relation(fields: [groupId], references: [id])\n\n  @@unique([userId, groupId])\n}\n\nmodel Message {\n  id      String   @id @default(cuid())\n  content String\n  sentAt  DateTime @default(now())\n\n  senderId String\n  groupId  String\n\n  sender User  @relation(fields: [senderId], references: [id])\n  group  Group @relation(fields: [groupId], references: [id])\n}\n",
-  "inlineSchemaHash": "23b2762986c8f13cf452e4f320b94871ae8a969144d4c0d9afa76bba88048361",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-1.1.x\", \"debian-openssl-3.0.x\", \"darwin\", \"darwin-arm64\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String   @id @default(cuid())\n  username      String   @unique\n  email         String   @unique\n  passwordHash  String\n  profilePicUrl String?\n  status        String?\n  walletAddress String   @unique\n  avatar        String?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n\n  // Relations\n  groupsCreated    Group[]       @relation(\"UserCreatedGroups\")\n  groupMemberships GroupMember[]\n  messages         Message[]\n}\n\nmodel AnonymousUser {\n  id            String   @id @default(cuid())\n  username      String   @unique\n  walletAddress String   @unique\n  avatar        String\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n}\n\nmodel Group {\n  id          String   @id @default(cuid())\n  name        String\n  description String?\n  creatorId   String\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // Relations\n  creator  User          @relation(\"UserCreatedGroups\", fields: [creatorId], references: [id])\n  members  GroupMember[]\n  messages Message[]\n}\n\nmodel GroupMember {\n  id       String   @id @default(cuid())\n  userId   String\n  groupId  String\n  joinedAt DateTime @default(now())\n\n  user  User  @relation(fields: [userId], references: [id])\n  group Group @relation(fields: [groupId], references: [id])\n\n  @@unique([userId, groupId])\n}\n\nmodel Message {\n  id      String   @id @default(cuid())\n  content String\n  sentAt  DateTime @default(now())\n\n  senderId String\n  groupId  String\n\n  sender User  @relation(fields: [senderId], references: [id])\n  group  Group @relation(fields: [groupId], references: [id])\n}\n",
+  "inlineSchemaHash": "1e25daa2305143863d408fdc512105fd3213a69c828afa9b04f9919642eac618",
   "copyEngine": true
 }
 config.dirname = '/'

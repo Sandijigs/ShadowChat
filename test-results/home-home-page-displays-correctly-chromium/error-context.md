@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- button "Open Next.js Dev Tools":
+  - img
+- alert
+- banner:
+  - img "shadow-chat"
+  - button "ShadowChat"
+  - navigation:
+    - button "Features"
+    - button "Technology"
+  - switch "Toggle theme"
+  - link "Connect Your Wallet":
+    - /url: /authentication
+- main:
+  - text: Coming Soon
+  - heading "Privacy-Focused Decentralized Social Network" [level=1]
+  - paragraph: Express yourself freely in a secure, end-to-end encrypted platform with complete control over your digital identity.
+  - button "Get Started.":
+    - text: Get Started.
+    - img
+  - button "Learn More"
+  - img
+  - heading "Encrypted Messages" [level=3]
+  - paragraph: End-to-end encrypted conversations that remain private and secure.
+  - img
+  - heading "Anonymous Communities" [level=3]
+  - paragraph: Join groups with like-minded individuals while maintaining your privacy.
+  - img
+  - text: Zero-knowledge Authentication
+  - img
+  - text: Starknet Powered Security
+  - heading "Key Features" [level=2]
+  - paragraph: ShadowChat combines cutting-edge technology with user-friendly design to provide a secure and private communication platform.
+  - img
+  - heading "Anonymous Profiles" [level=3]
+  - paragraph: Engage with the platform without linking your real-world identity, maintaining complete privacy.
+  - img
+  - heading "Encrypted Messaging" [level=3]
+  - paragraph: End-to-end encryption ensures your conversations remain private and unreadable to third parties.
+  - img
+  - heading "Private Communities" [level=3]
+  - paragraph: Create and join chat groups with like-minded individuals, all while maintaining anonymity.
+  - img
+  - heading "Zero-Knowledge Authentication" [level=3]
+  - paragraph: Verify your identity without revealing personal information through advanced cryptographic techniques.
+  - img
+  - heading "On-Chain Governance" [level=3]
+  - paragraph: Implement smart contract-based rules and democratic voting mechanisms within communities.
+  - img
+  - heading "Starknet Integration" [level=3]
+  - paragraph: Fast and low-cost transactions powered by Starknet's Layer 2 scalability solutions.
+  - heading "Built with Modern Technology" [level=2]
+  - paragraph: ShadowChat leverages cutting-edge web3 technologies to provide a secure, private, and decentralized communication platform.
+  - list:
+    - listitem:
+      - img
+      - text: Next.js & TypeScript
+      - paragraph: Optimized for a fast and scalable web experience with type-safe code.
+    - listitem:
+      - img
+      - text: Starknet & Cairo Smart Contracts
+      - paragraph: Secure, scalable interactions on the Starknet Layer 2 ecosystem.
+    - listitem:
+      - img
+      - text: IPFS & Arweave Storage
+      - paragraph: Decentralized storage solutions for messages and media.
+    - listitem:
+      - img
+      - text: Web3 Authentication
+      - paragraph: Secure wallet-based login using Starknet wallets (ArgentX & Braavos).
+  - text: STARKNET POWERED
+  - heading "Ready to Experience the Future of Private Communication?" [level=2]
+  - paragraph: Join our waitlist to be among the first to access ShadowChat when we launch.
+  - button "Join Waitlist"
+- contentinfo:
+  - text: ShadowChat
+  - paragraph: © 2025 ShadowChat. All rights reserved.
+  - link:
+    - /url: "#"
+    - img
+  - link:
+    - /url: https://github.com/SudiptaPaul-31/ShadowChat
+    - img
+  - link:
+    - /url: https://t.me/shadowchat_od
+    - img
+  - link "Privacy Policy":
+    - /url: "#"
+  - link "Terms of Service":
+    - /url: "#"
+  - link "Contact":
+    - /url: "#"
+```

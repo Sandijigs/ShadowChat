@@ -117,7 +117,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setConnectorName(null);
       clearPersistedConnection();
     }
-  }, [address, connector?.id, isConnected, isInitialized, persistConnection, clearPersistedConnection]);
+  }, [address, connector, connector?.id, isConnected, isInitialized, persistConnection, clearPersistedConnection]);
 
   // Handle page refresh or navigation - check for existing connection
   useEffect(() => {
