@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
         
       - name: Run lint
         run: npm run lint
@@ -46,7 +46,8 @@ jobs:
 
       - name: Set up Scarb
         run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
+          curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh -s -- -v 2.11.4
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
           scarb --version
 
       - name: Install dependencies
